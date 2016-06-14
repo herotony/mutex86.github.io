@@ -1,4 +1,9 @@
-﻿
+---
+layout: post
+published: true
+title: WSGI 读书笔记
+description: simple reading note
+---  
 
 #WSGI的目标
 WSGI 的全称是 Web Server Gateway Interface
