@@ -5,7 +5,7 @@ title: WSGI 读书笔记
 description: simple reading note
 ---  
 
-# WSGI的目标
+## WSGI的目标
 
 WSGI 的全称是 Web Server Gateway Interface
 
@@ -13,13 +13,13 @@ WSGI是web server和Python web应用（web applications）或者框架之间的�
 
 现在有一个问题：在WSGI提出以前，很多的server和应用都已经在生产中狂奔了，这些server和application肯定没法遵守WSGI。所以WSGI对这些已经在使用的server和application没有太多好处。为此，WSGI必须特别简单而且容易实现，让已经存在的server和应用只需要很少的更改即可满足这些规范。这样别人才有动力遵守WSGI。
 
-# 规范概述
+## 规范概述
 
 WSGI接口有两端：1)server端或者说“gateway”端 2)应用端或者“框架”端。server端调用由应用端提供的可调用对象（callable object），至于调用的方式取决于server端。这里的callable指的是 **一个函数，方法，类，或者拥有call方法的对象实例**。server和应用在调用callable对象的时候，不能依赖于这个callable对象的类型（不管是函数还是类）。callable对象仅仅能够被调用，不能自省（introspect）
 
 除了纯粹的server/gateways和applications/frameworks，还有中间件（middleware)存在于两者之间。对于server而言，中间件表现的像是一个应用，而对于应用而言，中间件表现的像是一个server。中间件很是强大，可以提供可扩展的API，内容转换和导航等等功能。
 
-# 应用/框架端
+## 应用/框架端
 
 应用的对象是一个接受两个参数的可调用对象。这里的可调用对象就是上面提到的“callable object”。一个函数、方法、类，或者带有*__call__* 方法的对象都可以用来当做应用程序对象。因为server端都会发重复的请求，所以应用的对象也必须能被多次调用，返回的结果也要是**可迭代的**。应用程序对象在这里并不是指应用程序开发者调用WSGI的API开发。 **现在假定应用程序开发者依然使用现有的、高层次的框架（如flask）来开发应用程序。WSGI其实是框架和server端的开发规范，并不直接支持应用开发。**
 
@@ -60,7 +60,7 @@ start_response必须返回一个write(*body_data*)可被调用的对象，个人
 
 ----------
 
-# server端/网关端
+## server端/网关端
 
 server端每次接收HTTP客户端的请求就调用application一次。下面是一个简单的CGI网关，以一个函数的形式来实现。这个例子里涉及到的错误处理很少，因为默认没有被捕捉到的异常都会dump到sys.stderr流中，并且web server 打在log中。
 
@@ -128,10 +128,9 @@ def run_with_cgi(application):
 
 服务端在在传输给HTTP客户端数据时，是不用缓冲的。在传输完当前的字符串才会请求下一个。这也就意味着应用必须有自己的缓存。如果application返回的可迭代对象有close()方法，就是上面代码中的result.close()。那么无论请求是否正常结束，最后都要调用这个方法，来释放application的资源。
 
-
 ----------
 
-# 中间件
+## 中间件
 
 在服务端，中间件表现的像一个应用。但是在应用端，中间件表现的像一个服务端。中间件有很多作用：
 >* 根据不同的URL将请求路由到不同的应用
@@ -210,11 +209,9 @@ from foo_app import foo_app
 run_with_cgi(Latinator(foo_app))
 ```
 
-
 ----------
 
-
-# 其他学习资料
+## 其他学习资料
 
 WSGI还有其他的一个规定，比如代码中一直出现的environ变量，还有输入和错误流，编码，url构建的问题等等。这些都比较细碎，不再这里总结了。这里有一些比较好的学习资源：
 
